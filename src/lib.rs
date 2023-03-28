@@ -47,7 +47,7 @@ pub fn compute2<
         });
 
         //SAFETY: https://doc.rust-lang.org/std/vec/struct.Vec.html#method.spare_capacity_mut
-        unsafe { result.set_len(input.len()) };
+        unsafe { result.set_len(result.capacity()) };
         result
     }
 }
