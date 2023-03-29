@@ -2,6 +2,11 @@ use std::num::NonZeroUsize;
 use std::thread;
 
 use rayon::prelude::*;
+use vecshard::VecShard;
+
+pub use chunks_owned::*;
+
+mod chunks_owned;
 
 #[inline]
 pub fn num_cpus() -> usize {
@@ -17,7 +22,7 @@ pub fn compute1<T, R, F: Fn(T) -> R>(input: Vec<T>, func: F) -> Vec<R> {
 
 #[inline]
 pub fn compute2<
-    T: Clone + Sync,
+    T: Send,
     R: Send,
     F: Fn(T) -> R + Clone + Send,
 >(
@@ -33,13 +38,13 @@ pub fn compute2<
         let chunk_size = input.len() / num_cpus();
         thread::scope(|scope| {
             //scoped thread would modify stack of this thread without Mutex
-            for (original, changed) in input
-                .chunks(chunk_size)
+            for (original, changed) in VecShard::from(input)
+                .chunks_owned(chunk_size)
                 .zip(result.spare_capacity_mut().chunks_mut(chunk_size))
             {
                 let f = func.clone();
                 scope.spawn(move || {
-                    for (t, r) in original.iter().cloned().zip(changed.iter_mut()) {
+                    for (t, r) in original.into_iter().zip(changed.iter_mut()) {
                         r.write(f(t));
                     }
                 });
