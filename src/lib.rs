@@ -54,9 +54,9 @@ pub fn compute2<
 
 #[inline]
 pub fn compute3<
-    T: Clone + Send + Sync + 'static,
-    R: Clone + Send + Sync + 'static,
-    F: Fn(T) -> R + Clone + Send + Sync + 'static,
+    T: Send,
+    R: Send,
+    F: Fn(T) -> R + Sync,
 >(
     input: Vec<T>,
     func: F,
