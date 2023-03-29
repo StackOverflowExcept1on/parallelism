@@ -17,8 +17,7 @@ impl<T> Iterator for ChunksOwned<T> {
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        //SAFETY: self.v is always `Some(_)`
-        let v = unsafe { self.v.take().unwrap_unchecked() };
+        let v = self.v.take()?;
         if v.len() == 0 {
             None
         } else {
