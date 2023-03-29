@@ -17,9 +17,9 @@ pub fn compute1<T, R, F: Fn(T) -> R>(input: Vec<T>, func: F) -> Vec<R> {
 
 #[inline]
 pub fn compute2<
-    T: Clone + Send + Sync + 'static,
-    R: Clone + Send + Sync + 'static,
-    F: Fn(T) -> R + Clone + Send + Sync + 'static,
+    T: Clone + Sync,
+    R: Send,
+    F: Fn(T) -> R + Clone + Send,
 >(
     input: Vec<T>,
     func: F,
