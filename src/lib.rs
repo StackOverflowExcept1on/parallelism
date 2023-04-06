@@ -17,7 +17,7 @@ pub fn num_cpus() -> usize {
 
 #[inline]
 pub fn compute1<T, R, F: Fn(T) -> R>(input: Vec<T>, func: F) -> Vec<R> {
-    input.into_iter().map(|x| func(x)).collect()
+    input.into_iter().map(func).collect()
 }
 
 #[inline]
@@ -70,6 +70,6 @@ pub fn compute3<
     if input.len() <= threshold {
         compute1(input, func)
     } else {
-        input.into_par_iter().map(|x| func(x)).collect()
+        input.into_par_iter().map(func).collect()
     }
 }
