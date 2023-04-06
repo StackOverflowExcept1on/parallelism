@@ -8,7 +8,7 @@ fn execute<R, F: FnOnce() -> R>(label: &str, func: F) -> R {
     let end_time = start_time.elapsed();
     println!("{label}:");
     println!("    {end_time:.2?}");
-    return ret;
+    ret
 }
 
 fn main() {
