@@ -61,7 +61,7 @@ pub fn compute2<
 pub fn compute3<
     T: Send,
     R: Send,
-    F: Fn(T) -> R + Sync,
+    F: Fn(T) -> R + Sync + Send,
 >(
     input: Vec<T>,
     func: F,
